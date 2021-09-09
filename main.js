@@ -99,7 +99,7 @@ let holdingDeck = [];
 function compareTopCard(){
     if (playerOneDeck[0].value > playerTwoDeck[0].value){
         $descPane.innerHTML += `PlayerOne flips a ${playerOneDeck[0].name} and PlayerTwo flips a ${playerTwoDeck[0].name}<br>`;
-        $descPane.innerHTML += 'PlayerOne wins!<br>';
+        $descPane.innerHTML += '<b>PlayerOne</b> wins!<br>';
         console.log('P1 wins!');
         let holdingSpace = playerOneDeck[0];
         playerOneDeck.shift();
@@ -111,9 +111,11 @@ function compareTopCard(){
             playerOneDeck = [...playerOneDeck, ...holdingDeck];
             holdingDeck = [];
         }
+        $descPane.innerHTML += `<b>PlayerOne</b> cards remaining: ${playerOneDeck.length}<br>`;
+        $descPane.innerHTML += `<b>PlayerTwo</b> cards remaining: ${playerTwoDeck.length}<br>`;
     } else if (playerOneDeck[0].value < playerTwoDeck[0].value){
         $descPane.innerHTML += `PlayerOne flips a ${playerOneDeck[0].name} and PlayerTwo flips a ${playerTwoDeck[0].name}<br>`;
-        $descPane.innerHTML += 'PlayerTwo wins!<br>';
+        $descPane.innerHTML += '<b>PlayerTwo wins!</b><br>';
         console.log('P2 wins!');
         let holdingSpace = playerTwoDeck[0];
         playerTwoDeck.shift();
@@ -125,9 +127,11 @@ function compareTopCard(){
             playerTwoDeck = [...playerTwoDeck, ...holdingDeck];
             holdingDeck = [];
         }
+        $descPane.innerHTML += `<b>PlayerOne</b> cards remaining: ${playerOneDeck.length}<br>`;
+        $descPane.innerHTML += `<b>PlayerTwo</b> cards remaining: ${playerTwoDeck.length}<br>`;
     } else {
         $descPane.innerHTML += `PlayerOne flips a ${playerOneDeck[0].name} and PlayerTwo flips a ${playerTwoDeck[0].name}<br>`;
-        $descPane.innerHTML += 'War Initiated!<br>';
+        $descPane.innerHTML += 'War Initiated!<br> Each player burns three cards unseen!<br>';
         console.log('War Initiated!');
         if (playerOneDeck.length < 3 && playerTwoDeck.length < 3) {
             console.log('Game Over!');
