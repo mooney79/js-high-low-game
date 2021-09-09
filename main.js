@@ -39,6 +39,8 @@ function Card(){
 
 };
 
+$descPane = document.querySelector(".description");
+
 const playerOne = new Player({name: 'John', score: 0,});
 Player.prototype.updateCardCount = function(){
    //add gained cards to bottom of deck, update each player's count.
@@ -77,13 +79,6 @@ const deckList =
 playerOneDeck = [];
 playerTwoDeck = [];
 
-    // Okay.  Logic time.
-    // Random number between 1 and Decklist.length
-    // Use a playerOneDeck and a playerTWoDeck.
-    // Take the item from Decklist[random] (delete it behind us)
-    // push it into proper player's array.
-    // run until Decklest.length = 0;
-
 function dealCards(){
   while (deckList.length > 0){
     myCard = pickACard();
@@ -96,10 +91,82 @@ function dealCards(){
 };
 
 function pickACard(){//randomly determines a number to act as index
-    return Math.floor(Math.random()*deckList.length);
+    return Math.floor(Math.random() * deckList.length);
 }
+
+
+let holdingDeck = [];
+function compareTopCard(){
+    if (playerOneDeck[0].value > playerTwoDeck[0].value){
+        $descPane.innerHTML += `PlayerOne flips a ${playerOneDeck[0].name} and PlayerTwo flips a ${playerTwoDeck[0].name}<br>`;
+        $descPane.innerHTML += 'PlayerOne wins!<br>';
+        console.log('P1 wins!');
+        let holdingSpace = playerOneDeck[0];
+        playerOneDeck.shift();
+        playerOneDeck.push(holdingSpace);
+        holdingSpace = playerTwoDeck[0];
+        playerTwoDeck.shift();
+        playerOneDeck.push(holdingSpace);
+        if (holdingDeck !== []) {
+            playerOneDeck = [...playerOneDeck, ...holdingDeck];
+            holdingDeck = [];
+        }
+    } else if (playerOneDeck[0].value < playerTwoDeck[0].value){
+        $descPane.innerHTML += `PlayerOne flips a ${playerOneDeck[0].name} and PlayerTwo flips a ${playerTwoDeck[0].name}<br>`;
+        $descPane.innerHTML += 'PlayerTwo wins!<br>';
+        console.log('P2 wins!');
+        let holdingSpace = playerTwoDeck[0];
+        playerTwoDeck.shift();
+        playerTwoDeck.push(holdingSpace);
+        holdingSpace = playerOneDeck[0];
+        playerOneDeck.shift();
+        playerTwoDeck.push(holdingSpace);
+        if (holdingDeck !== []) {
+            playerTwoDeck = [...playerTwoDeck, ...holdingDeck];
+            holdingDeck = [];
+        }
+    } else {
+        $descPane.innerHTML += `PlayerOne flips a ${playerOneDeck[0].name} and PlayerTwo flips a ${playerTwoDeck[0].name}<br>`;
+        $descPane.innerHTML += 'War Initiated!<br>';
+        console.log('War Initiated!');
+        if (playerOneDeck.length < 3 && playerTwoDeck.length < 3) {
+            console.log('Game Over!');
+            return;
+        }
+        //Shove three cards into each side
+        for (i=0; i<3; i++) {
+            let holdingSpace = playerOneDeck[0];
+            playerOneDeck.shift();
+            holdingDeck.push(holdingSpace);
+            holdingSpace = playerTwoDeck[0];
+            playerTwoDeck.shift();
+            holdingDeck.push(holdingSpace);
+        }
+        if (playerOneDeck.length === 0 || playerTwoDeck.length === 0) {
+            console.log('Game Over!');
+            return;
+        }
+        compareTopCard();
+    }
+};
+
 
 dealCards();
 console.log(playerOneDeck);
 console.log(playerTwoDeck);
+
+
+while (playerOneDeck.length > 1 && playerTwoDeck.length > 1) {
+    compareTopCard();
+}
+// If I change minimum length to 2, do I still get undefined error?
+// Yes, occasionally.  Why?
+// It's immediately after a long war is declared.  So I think the array is being emptied, then the value
+// of a nonexistant card checked.
+
+console.log(playerOneDeck);
+console.log(playerTwoDeck);
+console.log(holdingDeck);
+console.log('Above to be added to winner after each showdown');
+//Lose condition -- not enough cards to flip.
 
