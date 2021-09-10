@@ -1,7 +1,35 @@
 .description {
-    font-size: 3rem
+    font-size: 3rem;
+    width: auto;
 }
 
-/* div {
-    font-size: 3rem
-} */
+.card {
+    width: 25vw;
+    height: 35vw;
+    background-color: white;
+    border:5px solid slategray;
+    border-radius: 25px;
+    padding: 1vh;
+    margin:1vh;
+    color: white;
+    text-align: center;
+    font-size: 5vh;
+}
+
+.left{
+    background-color: blue;
+}
+
+.right{
+    background-color: red;
+}
+
+button{
+    margin-left: 40vw;
+    margin-right: 40vw;
+}
+
+.play-area{
+    display: flex;
+    flex-direction:row;
+}
