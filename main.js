@@ -2,12 +2,18 @@
 The goal is to be the first player to win all 52 cards
 
 THE DEAL
-The deck is divided evenly, with each player receiving 26 cards, dealt one at a time, face down. Anyone may deal first. Each player places their stack of cards face down, in front of them.
+The deck is divided evenly, with each player receiving 26 cards, dealt one at a time, 
+face down. Anyone may deal first. Each player places their stack of cards face down, 
+in front of them.
 
 THE PLAY
-Each player turns up a card at the same time, and the player with the higher card takes both cards and puts them, face down, on the bottom of his stack.
+Each player turns up a card at the same time, and the player with the higher card takes 
+both cards and puts them, face down, on the bottom of his stack.
 
-If the cards are the same rank, it is War. Each player places three cards face down and one card face up. The player with the higher card takes both piles (ten cards). If the turned-up cards are again the same rank, each player places another three cards face down and turns another card face up. The player with the higher card takes all 18 cards, and so on.
+If the cards are the same rank, it is War. Each player places three cards face down and 
+one card face up. The player with the higher card takes both piles (ten cards). If the turned-up 
+cards are again the same rank, each player places another three cards face down and turns another 
+card face up. The player with the higher card takes all 18 cards, and so on.
 
 HOW TO KEEP SCORE
 The game ends when one player has won all the cards.
@@ -15,10 +21,11 @@ The game ends when one player has won all the cards.
 REQUIREMENTS
 You must have a constructor for Game, Player, Deck, and Card
 You must attach methods to the prototype chain
-You must create a basic UI that includes a draw button and message box that informs the game status after each turn
+You must create a basic UI that includes a draw button and message box that informs the game status 
+after each turn
 */
 
-
+"use strict"
 
 //>>>>>>>>> CONSTRUCTORS <<<<<<<<<<
 
@@ -26,20 +33,232 @@ function Game(){
 
 };
 
-function Deck(){
-  
+function Deck(suit1=[], suit2=[], suit3=[], suit4=[]){
+    let cardList = [...suit1, ...suit2,...suit3, ...suit4];
+    return cardList;
 };
+//What if INSTEAD, I merged the suits into cardList, as above and shuffled them out to each player,
+// THEN imported those two new arrays(decks) into Deck?
+/*
+function Deck(arr) {
+    // Then what?  What do I DO with it now?
+    // Wait.. can I ... shit... thought, come back!
+    // Can I use Deck AS the sort?  No, not if I want to end up with two decks from one shuffle.  Right?
+    //
+}
+
+
+
+
+
+function shuffle (target1, target2){
+    while (startingDeck.length > 0) {
+      let myCard = pickACard();
+      target1.push(startingDeck[myCard]);
+      startingDeck.splice(myCard, 1);
+      myCard = pickACard();
+      target2.push(startingDeck[myCard]);
+      startingDeck.splice(myCard, 1);
+    }
+};
+
+testing something...*/
+/*
+const deckList = [{name: "8 of hearts", value: 8}, {name: "3 of clubs", value: 3}, {name: "10 of diamonds", value: 10}, {name: "jack of hearts", value: 11}];
+function Deck([{name, value}]){
+    this.name = name;
+    this.value = value;
+};
+for (let i=0;i < deckList.length; i++) {
+   newDeck[i] = new Deck(deckList[i]);
+}
+console.log(newDeck);
+*/
+/*This returns an empty object.
+newDeck = new Deck(deckList);
+
+Am I using Card for Deck's intended purpose?
+
+for (let i=2; i < 15; i++){
+    hearts[i-2] = new Card({name: 'Hearts', value: i})
+};
+
+Should I use something like this to fill up Deck?
+
+
+Okay.  So if I did something like...
+
+for loop to create cards (nested?  One for suit, one for value) INSIDE the deck function?
+for (i=0; i < 3; i++){
+    for (j=2; j <14; j++){
+        thing = new Card(i,j)
+    }
+}
+
+Then what?  Can I re-write my switch statement to rename all them cards?  I really don't want them to be
+visible to the user as {i:0, j:12}, no matter how convenient that might be.
+
+*/
 
 function Player({name, score=0}){
-    this.name=name;
-    this.score=score;
+    this.name = name;
+    this.score = score;
+};
+function Card({name, value}){
+    this.name = name;
+    this.value = value;
 };
 
-function Card(){
+//>>>>>>>>>>>> Prototype Methods <<<<<<<<<<<<<<
 
+/*  Is returning array making my new Deck objects not constructors anymore?
+
+Deck.prototype.shuffle = function (target1, target2){
+    while (this.length > 0) {
+      let myCard = pickACard();
+      target1.push(this[myCard]);
+      this.splice(myCard, 1);
+      myCard = pickACard();
+      target2.push(this[myCard]);
+      this.splice(myCard, 1);
+    }
+};
+*/
+
+
+//>>>>>>>>>>> Global Variables <<<<<<<<<<<
+
+let hearts = [];
+let diamonds = [];
+let spades = [];
+let clubs = [];
+
+//>>>>>>>>>>>> DOM Elements <<<<<<<<<<<<<<<<
+
+let $descPane = document.querySelector(".description");
+
+//>>>>>>>>>>> Instantiating Cards <<<<<<<<<<
+
+for (let i=2; i < 15; i++){
+    hearts[i-2] = new Card({name: 'Hearts', value: i})
 };
 
-$descPane = document.querySelector(".description");
+for (let i=2; i < 15; i++){
+    diamonds[i-2] = new Card({name: 'Diamonds', value: i})
+};
+
+for (let i=2; i < 15; i++){
+    spades[i-2] = new Card({name: 'Spades', value: i})
+};
+
+for (let i=2; i < 15; i++){
+    clubs[i-2] = new Card({name: 'Clubs', value: i})
+};
+
+//>>>>>>>>>>> Clean up Card Names <<<<<<<<<<<<<<<<
+
+for (let i=0; i < 13; i++){
+    switch (i) {
+        case 0: clubs[i].name = "Two of Clubs";
+            diamonds[i].name = "Two of Diamonds";
+            hearts[i].name = "Two of Hearts";
+            spades[i].name = "Two of Spades";
+            break;
+        case 1: clubs[i].name = "Three of Clubs";
+            diamonds[i].name = "Three of Diamonds";
+            hearts[i].name = "Three of Hearts";
+            spades[i].name = "Three of Spades";
+            break;
+        case 2: clubs[i].name = "Four of Clubs";
+            diamonds[i].name = "Four of Diamonds";
+            hearts[i].name = "Four of Hearts";
+            spades[i].name = "Four of Spades";
+            break;
+        case 3: clubs[i].name = "Five of Clubs";
+            diamonds[i].name = "Five of Diamonds";
+            hearts[i].name = "Five of Hearts";
+            spades[i].name = "Five of Spades";
+            break;
+        case 4: clubs[i].name = "Six of Clubs";
+            diamonds[i].name = "Six of Diamonds";
+            hearts[i].name = "Six of Hearts";
+            spades[i].name = "Six of Spades";
+            break;
+        case 5: clubs[i].name = "Seven of Clubs";
+            diamonds[i].name = "Seven of Diamonds";
+            hearts[i].name = "Seven of Hearts";
+            spades[i].name = "Seven of Spades";
+            break;
+        case 6: clubs[i].name = "Eight of Clubs";
+            diamonds[i].name = "Eight of Diamonds";
+            hearts[i].name = "Eight of Hearts";
+            spades[i].name = "Eight of Spades";
+            break;
+        case 7: clubs[i].name = "Nine of Clubs";
+            diamonds[i].name = "Nine of Diamonds";
+            hearts[i].name = "Nine of Hearts";
+            spades[i].name = "Nine of Spades";
+            break;
+        case 8: clubs[i].name = "Ten of Clubs";
+            diamonds[i].name = "Ten of Diamonds";
+            hearts[i].name = "Ten of Hearts";
+            spades[i].name = "Ten of Spades";
+            break;
+        case 9: clubs[i].name = "Jack of Clubs";
+            diamonds[i].name = "Jack of Diamonds";
+            hearts[i].name = "Jack of Hearts";
+            spades[i].name = "Jack of Spades";
+            break;
+        case 10: clubs[i].name = "Queen of Clubs";
+            diamonds[i].name = "Queen of Diamonds";
+            hearts[i].name = "Queen of Hearts";
+            spades[i].name = "Queenof Spades";
+            break;
+        case 11: clubs[i].name = "King of Clubs";
+            diamonds[i].name = "King of Diamonds";
+            hearts[i].name = "King of Hearts";
+            spades[i].name = "King of Spades";
+            break;
+        case 12: clubs[i].name = "Ace of Clubs";
+            diamonds[i].name = "Ace of Diamonds";
+            hearts[i].name = "Ace of Hearts";
+            spades[i].name = "Ace of Spades";
+            break;
+    }
+}
+
+//>>>>>>>> Create Initial Decks <<<<<<<<<<<<<<<<<<
+
+let startingDeck = new Deck(hearts, clubs, diamonds, spades);
+let playerOneDeck = new Deck();
+let playerTwoDeck = new Deck();
+shuffle(playerOneDeck, playerTwoDeck);
+
+
+//>>>>>>>>>>> Random Card Function <<<<<<<<<<<<<<<<<<<<<<
+function pickACard(){//randomly determines a number to act as index
+    return Math.floor(Math.random() * startingDeck.length);
+}
+
+//>>>>>>>>>>> Shuffle cards into starting Decks <<<<<<<<
+function shuffle (target1, target2){
+    while (startingDeck.length > 0) {
+      let myCard = pickACard();
+      target1.push(startingDeck[myCard]);
+      startingDeck.splice(myCard, 1);
+      myCard = pickACard();
+      target2.push(startingDeck[myCard]);
+      startingDeck.splice(myCard, 1);
+    }
+};
+
+
+//>>>>>>>>>> Messy Code <<<<<<<<<<<<<
+console.log(playerOneDeck);
+console.log(playerTwoDeck);
+/*
+
+
 
 const playerOne = new Player({name: 'John', score: 0,});
 Player.prototype.updateCardCount = function(){
@@ -174,3 +393,18 @@ console.log(holdingDeck);
 console.log('Above to be added to winner after each showdown');
 //Lose condition -- not enough cards to flip.
 
+//card constructor to create cards (value, suit).  Each card
+
+//deck constructor to create deck of cards.   Decks required: p1, p2, and holding
+// cards: key; value would be an array of objects? 
+
+//player constructor to ... store player decks? Players required: p1, p2
+//game constructor: 
+//instance of card can be inside instance of deck, for example?
+function Dog({name} = {}) {
+    this.name = name;
+    this.speaks = function(){
+        console.log('Woof! Woof!');
+    }
+}
+*/
