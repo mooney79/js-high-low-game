@@ -27,11 +27,10 @@ after each turn
 
 
 /*>>>>>>>>>>>>> DESIRED FEATURES LIST <<<<<<<<<<<<<<<<
-1. Some indication of the currently drawn card for each player in the placeholder
-   boxes.
-2. Option to enter names for each player.
-3. Updated card counts in area on page below card placeholders.
-4. Game Over messages, with winner announcement
+1. Option to enter names for each player.
+2. Game Over messages, with winner announcement
+3. Re-implement error protection now that button-initated
+4. Re-start game button (remember to remap $button)
 
 */
 
