@@ -1,11 +1,18 @@
+.html {
+    overflow:hidden;
+}
+
 .description {
-    font-size: 3rem;
+    font-size: 2rem;
     width: auto;
+    height: 35vh;
+    max-height: 35vh;
+    overflow-y: scroll;
 }
 
 .card {
-    width: 25vw;
-    height: 35vw;
+    width: 25vh;
+    height: 35vh;
     background-color: white;
     border:5px solid slategray;
     border-radius: 25px;
@@ -32,4 +39,9 @@ button{
 .play-area{
     display: flex;
     flex-direction:row;
+}
+
+.play1, .play2{
+    display: flex;
+    flex-direction: column;
 }
