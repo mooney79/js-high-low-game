@@ -4,13 +4,14 @@
 
 .description {
     font-size: 2rem;
-    width: auto;
+    width: 65vh;
     height: 35vh;
     max-height: 35vh;
     overflow-y: scroll;
 }
 
 .card {
+    display: flex;
     width: 25vh;
     height: 35vh;
     background-color: white;
@@ -20,6 +21,7 @@
     margin:1vh;
     color: white;
     text-align: center;
+    align-items: center;
     font-size: 5vh;
 }
 
@@ -32,8 +34,8 @@
 }
 
 button{
-    margin-left: 40vw;
-    margin-right: 40vw;
+    margin-left: 55vh;
+    margin-right: 55vh;
 }
 
 .play-area{
@@ -44,4 +46,8 @@ button{
 .play1, .play2{
     display: flex;
     flex-direction: column;
+}
+
+.p1-card-count, .p2-card-count {
+    font-size: 2rem;
 }

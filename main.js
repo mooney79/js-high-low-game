@@ -54,7 +54,12 @@ let holdingSpace = {};
 //>>>>>>>>> DOM ELEMENTS <<<<<<<<<<
 
 let $descPane = document.querySelector(".description");
+let $p1cardCount = document.querySelector(".p1-card-count");
+let $p2cardCount = document.querySelector(".p2-card-count");
 let $playButton = document.querySelector("button");
+let $leftCard = document.querySelector(".left");
+let $rightCard = document.querySelector(".right");
+
 
 //>>>>>>>>> CONSTRUCTORS <<<<<<<<<<
 
@@ -102,6 +107,8 @@ Game.prototype.compareTopCard = function (){
     if (playerOneDeck.cards[0].value > playerTwoDeck.cards[0].value){
         $descPane.innerHTML += `PlayerOne flips a ${playerOneDeck.cards[0].name} and PlayerTwo flips a ${playerTwoDeck.cards[0].name}<br>`;
         $descPane.innerHTML += '<b>PlayerOne</b> wins!<br>';
+        $leftCard.innerHTML = `${playerOneDeck.cards[0].name}`;
+        $rightCard.innerHTML = `${playerTwoDeck.cards[0].name}`;
         console.log('P1 wins!');
         let holdingSpace = playerOneDeck.cards[0];
         playerOneDeck.cards.shift();
@@ -113,12 +120,17 @@ Game.prototype.compareTopCard = function (){
             playerOneDeck.cards = [...playerOneDeck.cards, ...holdingDeck];
             holdingDeck = [];
         };
-        $descPane.innerHTML += `<b>PlayerOne</b> cards remaining: ${playerOneDeck.cards.length}<br>`;
-        $descPane.innerHTML += `<b>PlayerTwo</b> cards remaining: ${playerTwoDeck.cards.length}<br>`;
+        // $descPane.innerHTML += `<b>PlayerOne</b> cards remaining: ${playerOneDeck.cards.length}<br>`;
+        // $descPane.innerHTML += `<b>PlayerTwo</b> cards remaining: ${playerTwoDeck.cards.length}<br>`;
+        $p1cardCount.innerHTML = `Cards remaining: ${playerOneDeck.cards.length}`;
+        $p2cardCount.innerHTML = `Cards remaining: ${playerTwoDeck.cards.length}`;
+        $descPane.scrollTop = $descPane.scrollHeight;
     } else if (playerOneDeck.cards[0].value < playerTwoDeck.cards[0].value){
         $descPane.innerHTML += `PlayerOne flips a ${playerOneDeck.cards[0].name} and PlayerTwo flips a ${playerTwoDeck.cards[0].name}<br>`;
         $descPane.innerHTML += '<b>PlayerTwo wins!</b><br>';
         console.log('P2 wins!');
+        $leftCard.innerHTML = `${playerOneDeck.cards[0].name}`;
+        $rightCard.innerHTML = `${playerTwoDeck.cards[0].name}`;
         let holdingSpace = playerTwoDeck.cards[0];
         playerTwoDeck.cards.shift();
         playerTwoDeck.cards.push(holdingSpace);
@@ -129,12 +141,18 @@ Game.prototype.compareTopCard = function (){
             playerTwoDeck.cards = [...playerTwoDeck.cards, ...holdingDeck];
             holdingDeck = [];
         }
-        $descPane.innerHTML += `<b>PlayerOne</b> cards remaining: ${playerOneDeck.cards.length}<br>`;
-        $descPane.innerHTML += `<b>PlayerTwo</b> cards remaining: ${playerTwoDeck.cards.length}<br>`;
+        // $descPane.innerHTML += `<b>PlayerOne</b> cards remaining: ${playerOneDeck.cards.length}<br>`;
+        // $descPane.innerHTML += `<b>PlayerTwo</b> cards remaining: ${playerTwoDeck.cards.length}<br>`;
+        $p1cardCount.innerHTML = `Cards remaining: ${playerOneDeck.cards.length}`;
+        $p2cardCount.innerHTML = `Cards remaining: ${playerTwoDeck.cards.length}`;
+        $descPane.scrollTop = $descPane.scrollHeight;
     } else {
         $descPane.innerHTML += `PlayerOne flips a ${playerOneDeck.cards[0].name} and PlayerTwo flips a ${playerTwoDeck.cards[0].name}<br>`;
+        $leftCard.innerHTML = `${playerOneDeck.cards[0].name}`;
+        $rightCard.innerHTML = `${playerTwoDeck.cards[0].name}`;
         $descPane.innerHTML += 'War Initiated!<br> Each player burns three cards unseen!<br>';
         console.log('War Initiated!');
+        $descPane.scrollTop = $descPane.scrollHeight;
         if (playerOneDeck.cards.length < 3 && playerTwoDeck.cards.length < 3) {
             console.log('Game Over!');
             return;
@@ -154,6 +172,13 @@ Game.prototype.compareTopCard = function (){
         }
     }
 };
+
+//>>>>>>>>>> Utility Functions <<<<<<<<<<<<
+
+// function updateScroll(){
+//     $descPane.scrollTop = $descPane.scrollHeight;
+// }
+
 
 //>>>>>>>>>>> Instantiating Cards <<<<<<<<<<
 
