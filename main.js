@@ -27,11 +27,9 @@ after each turn
 
 
 /*>>>>>>>>>>>>> DESIRED FEATURES LIST <<<<<<<<<<<<<<<<
-1. Option to enter names for each player.
-2. Game Over messages, with winner announcement
-3. Re-implement error protection now that button-initated
-4. Re-start game button (remember to remap $button)
-
+1. Game Over messages, with winner announcement
+2. Re-implement error protection now that button-initated
+3. Re-start game button (remember to remap $button)
 */
 
 "use strict"
@@ -49,6 +47,8 @@ let playerOne = {};
 let playerTwo = {};
 let holdingDeck = []; // The pot
 let holdingSpace = {};
+let p1Name = '';
+let p2Name = '';
 
 //>>>>>>>>> DOM ELEMENTS <<<<<<<<<<
 
@@ -71,7 +71,7 @@ function Card({name, value}){
     this.value = value;
 };
 
-function Player({name, cardCount=0, deck}){
+function Player({name = `Player`, cardCount=0, deck}){
     this.name = name;
     this.cardCount = cardCount;
     this.deck = deck;
@@ -82,8 +82,8 @@ function Game(){
     playerOneDeck = new Deck();
     playerTwoDeck = new Deck();
     startingDeck.shuffle(startingDeck, playerOneDeck, playerTwoDeck);
-    this.playerOne = new Player ({name: 'Player 1', cardCount: playerOneDeck.cards.length, deck: playerOneDeck});
-    this.playerTwo = new Player({name: 'Player 2', cardCount: playerTwoDeck.cards.length, deck: playerTwoDeck});
+    this.playerOne = new Player ({name: p1Name, cardCount: playerOneDeck.cards.length, deck: playerOneDeck});
+    this.playerTwo = new Player({name: p2Name, cardCount: playerTwoDeck.cards.length, deck: playerTwoDeck});
 };
 
 
@@ -91,11 +91,9 @@ function Game(){
 
 Deck.prototype.shuffle = function (origin, target1, target2){
     while (this.cards.length > 0) {
-//      let myCard = pickACard();
       let myCard = Math.floor(Math.random() * origin.cards.length);
       target1.cards.push(this.cards[myCard]);
       this.cards.splice(myCard, 1);
-//      myCard = pickACard();
       myCard = Math.floor(Math.random() * origin.cards.length);
       target2.cards.push(this.cards[myCard]);
       this.cards.splice(myCard, 1);
@@ -104,11 +102,10 @@ Deck.prototype.shuffle = function (origin, target1, target2){
 
 Game.prototype.compareTopCard = function (){
     if (playerOneDeck.cards[0].value > playerTwoDeck.cards[0].value){
-        $descPane.innerHTML += `PlayerOne flips a ${playerOneDeck.cards[0].name} and PlayerTwo flips a ${playerTwoDeck.cards[0].name}<br>`;
-        $descPane.innerHTML += '<b>PlayerOne</b> wins!<br>';
+        $descPane.innerHTML += `${game.playerOne.name} flips a ${playerOneDeck.cards[0].name} and ${game.playerTwo.name} flips a ${playerTwoDeck.cards[0].name}<br>`;
+        $descPane.innerHTML += `${game.playerOne.name} wins the hand!<br>`;
         $leftCard.innerHTML = `${playerOneDeck.cards[0].name}`;
         $rightCard.innerHTML = `${playerTwoDeck.cards[0].name}`;
-        console.log('P1 wins!');
         let holdingSpace = playerOneDeck.cards[0];
         playerOneDeck.cards.shift();
         playerOneDeck.cards.push(holdingSpace);
@@ -119,15 +116,12 @@ Game.prototype.compareTopCard = function (){
             playerOneDeck.cards = [...playerOneDeck.cards, ...holdingDeck];
             holdingDeck = [];
         };
-        // $descPane.innerHTML += `<b>PlayerOne</b> cards remaining: ${playerOneDeck.cards.length}<br>`;
-        // $descPane.innerHTML += `<b>PlayerTwo</b> cards remaining: ${playerTwoDeck.cards.length}<br>`;
         $p1cardCount.innerHTML = `Cards remaining: ${playerOneDeck.cards.length}`;
         $p2cardCount.innerHTML = `Cards remaining: ${playerTwoDeck.cards.length}`;
         $descPane.scrollTop = $descPane.scrollHeight;
     } else if (playerOneDeck.cards[0].value < playerTwoDeck.cards[0].value){
-        $descPane.innerHTML += `PlayerOne flips a ${playerOneDeck.cards[0].name} and PlayerTwo flips a ${playerTwoDeck.cards[0].name}<br>`;
-        $descPane.innerHTML += '<b>PlayerTwo wins!</b><br>';
-        console.log('P2 wins!');
+        $descPane.innerHTML += `${game.playerOne.name} flips a ${playerOneDeck.cards[0].name} and ${game.playerTwo.name} flips a ${playerTwoDeck.cards[0].name}<br>`;
+        $descPane.innerHTML += `${game.playerTwo.name} wins the hand!<br>`;
         $leftCard.innerHTML = `${playerOneDeck.cards[0].name}`;
         $rightCard.innerHTML = `${playerTwoDeck.cards[0].name}`;
         let holdingSpace = playerTwoDeck.cards[0];
@@ -140,17 +134,14 @@ Game.prototype.compareTopCard = function (){
             playerTwoDeck.cards = [...playerTwoDeck.cards, ...holdingDeck];
             holdingDeck = [];
         }
-        // $descPane.innerHTML += `<b>PlayerOne</b> cards remaining: ${playerOneDeck.cards.length}<br>`;
-        // $descPane.innerHTML += `<b>PlayerTwo</b> cards remaining: ${playerTwoDeck.cards.length}<br>`;
         $p1cardCount.innerHTML = `Cards remaining: ${playerOneDeck.cards.length}`;
         $p2cardCount.innerHTML = `Cards remaining: ${playerTwoDeck.cards.length}`;
         $descPane.scrollTop = $descPane.scrollHeight;
     } else {
-        $descPane.innerHTML += `PlayerOne flips a ${playerOneDeck.cards[0].name} and PlayerTwo flips a ${playerTwoDeck.cards[0].name}<br>`;
+        $descPane.innerHTML += `${game.playerOne.name} flips a ${playerOneDeck.cards[0].name} and ${game.playerTwo.name} flips a ${playerTwoDeck.cards[0].name}<br>`;
         $leftCard.innerHTML = `${playerOneDeck.cards[0].name}`;
         $rightCard.innerHTML = `${playerTwoDeck.cards[0].name}`;
         $descPane.innerHTML += 'War Initiated!<br> Each player burns three cards unseen!<br>';
-        console.log('War Initiated!');
         $descPane.scrollTop = $descPane.scrollHeight;
         if (playerOneDeck.cards.length < 3 && playerTwoDeck.cards.length < 3) {
             console.log('Game Over!');
@@ -270,8 +261,18 @@ for (let i=0; i < 13; i++){
     }
 }
 
+p1Name = prompt(`Please enter player one's name:`);
+p2Name = prompt(`Please enter player two's name:`);
+
 let game = new Game();
-// console.log('Game Initiated');
-// console.log(game);
 $playButton.addEventListener("click", function () {
     game.compareTopCard()});
+
+
+
+/*
+>>>>>>>>>>>> Brainstorming implementing features... <<<<<<<<<<<<<<<
+
+
+
+*/

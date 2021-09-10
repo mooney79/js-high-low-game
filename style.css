@@ -36,6 +36,8 @@
 button{
     margin-left: 55vh;
     margin-right: 55vh;
+    width: 25vh;
+    height: 10vh;
 }
 
 .play-area{
@@ -50,4 +52,21 @@ button{
 
 .p1-card-count, .p2-card-count {
     font-size: 2rem;
+}
+
+header {
+  padding-top: 0vh;
+  padding-bottom: 0.5vh;
+  width: 100%;
+  text-align: center;
+  background-color: skyblue
+}
+
+h1 {
+    font-size: 5rem;
+}
+
+h2 {
+    font-size: 1.5rem;
+    margin-top: -5vh    
 }
