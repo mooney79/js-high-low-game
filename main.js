@@ -27,9 +27,7 @@ after each turn
 
 
 /*>>>>>>>>>>>>> DESIRED FEATURES LIST <<<<<<<<<<<<<<<<
-1. Game Over messages, with winner announcement
-2. Re-implement error protection now that button-initated
-3. Re-start game button (remember to remap $button)
+1. Re-start game button (remember to remap $button)
 */
 
 "use strict"
@@ -101,6 +99,18 @@ Deck.prototype.shuffle = function (origin, target1, target2){
 };
 
 Game.prototype.compareTopCard = function (){
+    if (playerOneDeck.cards.length === 0 || playerTwoDeck.cards.length === 0) {
+        if (playerOneDeck.cards.length === 0) {
+            $descPane.innerHTML += `${game.playerOne.name} has run out of cards!<br> ${game.playerTwo.name} wins!<br> Refresh to play again.<br>`;
+            $descPane.scrollTop = $descPane.scrollHeight;
+            return;
+        } else {
+            $descPane.innerHTML += `${game.playerTwo.name} has run out of cards!<br> ${game.playerOne.name} wins!<br> Refresh to play again.<br>`;
+            $descPane.scrollTop = $descPane.scrollHeight;
+            return;
+        }
+       
+    }
     if (playerOneDeck.cards[0].value > playerTwoDeck.cards[0].value){
         $descPane.innerHTML += `${game.playerOne.name} flips a ${playerOneDeck.cards[0].name} and ${game.playerTwo.name} flips a ${playerTwoDeck.cards[0].name}<br>`;
         $descPane.innerHTML += `${game.playerOne.name} wins the hand!<br>`;
@@ -143,9 +153,17 @@ Game.prototype.compareTopCard = function (){
         $rightCard.innerHTML = `${playerTwoDeck.cards[0].name}`;
         $descPane.innerHTML += 'War Initiated!<br> Each player burns three cards unseen!<br>';
         $descPane.scrollTop = $descPane.scrollHeight;
-        if (playerOneDeck.cards.length < 3 && playerTwoDeck.cards.length < 3) {
-            console.log('Game Over!');
-            return;
+        if (playerOneDeck.cards.length < 4 || playerTwoDeck.cards.length < 4) {
+            if (playerOneDeck.cards.length < 4) {
+                $descPane.innerHTML += `${game.playerOne.name} doesn't have enough cards!<br> ${game.playerTwo.name} wins!<br> Refresh to play again.<br>`;
+                $descPane.scrollTop = $descPane.scrollHeight;
+                return;
+            } else {
+                $descPane.innerHTML += `${game.playerTwo.name} doesn't have enough cards!<br> ${game.playerOne.name} wins!<br> Refresh to play again.<br>`;
+                $descPane.scrollTop = $descPane.scrollHeight;
+                return;
+            }
+
         }
         //Shove three cards into each side
         for (let i=0; i<4; i++) {
@@ -155,10 +173,6 @@ Game.prototype.compareTopCard = function (){
             holdingSpace = playerTwoDeck.cards[0];
             playerTwoDeck.cards.shift();
             holdingDeck.push(holdingSpace);
-        }
-        if (playerOneDeck.cards.length === 0 || playerTwoDeck.cards.length === 0) {
-            console.log('Game Over!');
-            return;
         }
     }
 };
